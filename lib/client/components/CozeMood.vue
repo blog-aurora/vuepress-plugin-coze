@@ -38,7 +38,6 @@
 import {
   defineComponent
 } from 'vue'
-
 import MoodItem from "./MoodItem.vue";
 import AddMood from './AddMood.vue'
 const AV = require('leancloud-storage');
@@ -67,7 +66,7 @@ export default defineComponent({
       showMoodControl: false
     }
   },
-  emits: ['cozeSuccess'],
+  emits: ['cozeSuccess','moodEdit','cozeCancelEdit'],
   created() {
     const query = new AV.Query('Talk');
     query.descending('createdAt');
@@ -130,6 +129,10 @@ export default defineComponent({
     cancel(openEditStatus) {
       this.openEditStatus = openEditStatus.openEditStatus
       this.showMoodControl = openEditStatus.openEditStatus
+
+      this.$emit("cozeCancelEdit",{
+        openEditStatus: this.openEditStatus
+      })
     },
     moodComment(moodItem) {
 
@@ -149,6 +152,9 @@ export default defineComponent({
       }else {
         this.showMoodControl = true
       }
+      this.$emit("moodEdit",{
+        openEditStatus: this.openEditStatus
+      })
     }
   },
 })
